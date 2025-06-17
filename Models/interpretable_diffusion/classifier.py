@@ -19,7 +19,8 @@ def normalization(channels):
     :param channels: number of input channels.
     :return: an nn.Module for normalization.
     """
-    return GroupNorm32(8, channels)
+    # return GroupNorm32(8, channels)
+    return GroupNorm32(20, channels)
 
 
 def conv_nd(dims, *args, **kwargs):
