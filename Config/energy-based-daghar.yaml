@@ -20,7 +20,7 @@ model:
 solver:
   base_lr: 1.0e-5
   max_epochs: 25000
-  results_folder: ./Checkpoints_energy_based_daghar_2025_08_21
+  results_folder: ./Checkpoints/energy_based_daghar_2025_08_21
   gradient_accumulate_every: 2
   save_cycle: 2500  # max_epochs // 10
   ema:
