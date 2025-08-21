@@ -5,7 +5,7 @@ from Utils.io_utils import instantiate_from_config
 def build_dataloader(config, args=None):
     batch_size = config['dataloader']['batch_size']
     jud = config['dataloader']['shuffle']
-    config['dataloader']['train_dataset']['params']['output_dir'] = args.save_dir
+    # config['dataloader']['train_dataset']['params']['output_dir'] = args.save_dir
     dataset = instantiate_from_config(config['dataloader']['train_dataset'])
 
     dataloader = torch.utils.data.DataLoader(dataset,

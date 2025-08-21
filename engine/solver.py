@@ -105,7 +105,13 @@ class Trainer(object):
             while step < self.train_num_steps:
                 total_loss = 0.
                 for _ in range(self.gradient_accumulate_every):
-                    data = next(self.dl).to(device)
+                    data = next(self.dl)
+                    # Adapt for new dataset
+                    if isinstance(data, list):
+                        data = data[0]
+                    if "daghar" in self.args.config_path:
+                        data = data.transpose(1,2)
+                    data = data.to(device)
                     loss = self.model(data, target=data)
                     loss = loss / self.gradient_accumulate_every
                     loss.backward()
