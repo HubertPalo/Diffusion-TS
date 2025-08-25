@@ -10,17 +10,32 @@ model:
     sampling_timesteps: 1000
     loss_type: 'l1'
     beta_schedule: 'cosine'
-    n_heads: 4
+    n_heads: 8
     mlp_hidden_times: 4
     attn_pd: 0.0
     resid_pd: 0.0
     kernel_size: 1
     padding_size: 0
 
+classifier:
+  target: Models.interpretable_diffusion.classifier.Classifier
+  params:
+    seq_length: 60
+    feature_size: 6
+    num_classes: 6
+    n_layer_enc: 3
+    n_embd: 256  # 4 X 16
+    n_heads: 4
+    mlp_hidden_times: 4
+    attn_pd: 0.0
+    resid_pd: 0.0
+    max_len: 60  # seq_length
+    num_head_channels: 20
+
 solver:
   base_lr: 1.0e-5
   max_epochs: 25000
-  results_folder: ./Checkpoints/energy_based_daghar_2025_08_21
+  results_folder: ./Checkpoints/daghar_2025_08_21_class_0
   gradient_accumulate_every: 2
   save_cycle: 2500  # max_epochs // 10
   ema:
@@ -43,7 +58,7 @@ dataloader:
   train_dataset:
     target: minerva_files.series_dataset.MultiModalSeriesCSVDataset
     params:
-      data_path: ./Data/data/normalized_label/train.csv
+      data_path: ./Data/data/normalized_label/train_class_0.csv
       feature_prefixes: ["accel-x", "accel-y", "accel-z", "gyro-x", "gyro-y", "gyro-z"]
       label: standard activity code
       features_as_channels: True

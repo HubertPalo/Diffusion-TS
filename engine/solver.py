@@ -30,7 +30,7 @@ class Trainer(object):
         self.gradient_accumulate_every = config['solver']['gradient_accumulate_every']
         self.save_cycle = config['solver']['save_cycle']
         self.dl = cycle(dataloader['dataloader'])
-        self.dataloader = dataloader['dataloader']
+        self.dataloader = cycle(dataloader['dataloader'])
         self.step = 0
         self.milestone = 0
         self.args, self.config = args, config
@@ -207,7 +207,9 @@ class Trainer(object):
         self.milestone_classifier = 0
         self.step_classifier = 0
         dataloader = self.dataloader
-        dataloader.dataset.shift_period('test')
+        # Adapt for new dataset
+        if not ("daghar" in self.args.config_path):
+            dataloader.dataset.shift_period('test')
         dataloader = cycle(dataloader)
 
         self.classifier = classifier
@@ -221,7 +223,10 @@ class Trainer(object):
             while step < self.train_num_steps:
                 total_loss = 0.
                 for _ in range(self.gradient_accumulate_every):
-                    x, y = next(dataloader)
+                    x, y = next(dataloader)                    
+                    # Adapt for new dataset
+                    if "daghar" in self.args.config_path:
+                        x = x.transpose(1,2)
                     x, y = x.to(device), y.to(device)
                     x_t, t = self.forward_sample(x)
                     logits = classifier(x_t, t)
